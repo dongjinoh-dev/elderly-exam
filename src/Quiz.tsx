@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import questions from './data/questions.json';
 import './Quiz.css';
 
+interface Choice {
+  id: string;
+  text: string;
+}
+
 interface Question {
   id: number;
   text: string;
-  choices: { id: string; text: string }[];
+  choices: Choice[];
   answer: string;
 }
 
 interface Questions {
   questions: Question[];
-}
-
-interface Choice {
-  id: string;
-  text: string;
 }
 
 function Quiz() {
@@ -36,14 +36,14 @@ function Quiz() {
       alert('답안을 선택해주세요.');
       return;
     }
-  
+
     const isCorrect: boolean = selectedAnswerId === currentQuestion.answer;
     if (isCorrect) {
       setScore(score + 1);
     }
-  
+
     setSelectedAnswerId('');
-  
+
     if (isLastQuestion) {
       const finalScore = isCorrect ? score + 1 : score;
       const confirmRestart = window.confirm(`최종 점수: ${finalScore}/${questions.questions.length}\n다시 풀겠습니까?`);
@@ -56,26 +56,26 @@ function Quiz() {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   }
-  
-  
-  
-
-  let timer: NodeJS.Timeout;
 
   useEffect(() => {
+    let timer: number | undefined = undefined;
     if (timeLeft > 0) {
-      timer = setTimeout(() => {
-        setTimeLeft(timeLeft - 1);
+      timer = window.setInterval(() => {
+        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
       }, 1000);
     } else {
       alert(`시간 초과! 최종 점수: ${score}/${questions.questions.length}`);
     }
-  
-    return () => clearTimeout(timer);
-  }, [timeLeft, score]);
-  
+
+    return () => {
+      if (timer !== undefined) {
+        window.clearInterval(timer);
+      }
+    };
+  }, [timeLeft, score, questions.questions.length]);
+
   return (
-    <div className="quiz">
+<div className="quiz">
       <div className="timer">
         {timeLeft}초&nbsp;&nbsp;|&nbsp;&nbsp;맞춘 개수: {score}
       </div>
@@ -97,9 +97,8 @@ function Quiz() {
       <button onClick={handleNextButtonClick}>
         {isLastQuestion ? '제출' : '다음 문제'}
       </button>
-    </div>
+      </div>
   );
-  
 }
 
 export default Quiz;

@@ -1,7 +1,16 @@
+.quiz-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .quiz {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
   text-align: center;
+  border-radius: 5px;
 }
 
 .quiz h2 {

@@ -19,11 +19,15 @@
 }
 
 .quiz ul {
+  margin:0;
+  padding:0;
   list-style: none;
   margin-bottom: 2rem;
 }
 
 .quiz li {
+  margin:0;
+  padding:0;
   margin-bottom: 1rem;
 }
 
